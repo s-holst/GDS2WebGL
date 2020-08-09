@@ -1,0 +1,24 @@
+{
+  "name": "gds2webgl",
+  "version": "0.0.0",
+  "description": "Browser code to display and interact with translated GDSII data",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s-holst/GDS2WebGL.git"
+  },
+  "dependencies": {
+    "base64-arraybuffer": "^0.2.0",
+    "gl-matrix": "^3.3.0",
+    "pan-zoom": "^3.5.0"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.1",
+    "tinyify": "^3.0.0"
+  },
+  "scripts": {
+    "build": "browserify -p tinyify app.js -o bundle.js"
+  },
+  "author": "Stefan Holst",
+  "license": "MIT"
+}

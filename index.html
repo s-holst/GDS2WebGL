@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>GDS2WebGL</title>
+        <meta charset="utf-8">
+        <style>
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden;
+                touch-action: none;
+                background-color: black;
+            }
+            #glcanvas {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+
+    <body onresize="resizeHandler()">
+        <canvas id="glcanvas"></canvas>
+    </body>
+
+    <script src="data.js"></script>
+    <script src="bundle.js"></script>
+
+</html>
