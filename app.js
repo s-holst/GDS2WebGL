@@ -13,7 +13,7 @@ const fovy = 15.0;
 
 var x_position = 0;
 var y_position = 0;
-var z_position = -4;
+var z_position = -zFar;
 
 let uProjectionMatrix;
 let uModelViewMatrix;
@@ -90,7 +90,6 @@ window.onload = function init() {
     uColor = gl.getUniformLocation(shaderProgram, 'uColor');
 
     for (const d of data) {
-
         const p_buffer = new DataView(b64arraybuffer.decode(d.p_str));
         d.p_array = new Float32Array(d.p_len*6);
         for (let i = 0; i < d.p_len; i++) {
@@ -139,7 +138,6 @@ window.onload = function init() {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, d.w_buffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, d.w_array, gl.STATIC_DRAW);
         }
-
     }
 
     updateMatrices(gl);
@@ -162,7 +160,7 @@ window.onload = function init() {
         
         const cdx = e.dx / gl.canvas.width  * -2;
         const cdy = e.dy / gl.canvas.height * 2;
-        const cdz = e.dz / 500;
+        const cdz = e.dz / 700;
 
         glMatrix.vec4.transformMat4(vec, [cx+cdx, cy+cdy, cz, 1.0], inverseMatrix)
 
@@ -212,7 +210,7 @@ function compileShader(gl, type, source) {
 
 function updateMatrices(gl) {
     glMatrix.mat4.perspective(projectionMatrix, fovy * Math.PI / 180, gl.canvas.width / gl.canvas.height, zNear-0.1, zFar+0.001);
-    glMatrix.mat4.fromTranslation(modelViewMatrix, [x_position, y_position, z_position]);
+    glMatrix.mat4.fromTranslation(modelViewMatrix, [x_position-1+data_size[0], y_position+1-data_size[1], z_position]);
     glMatrix.mat4.mul(inverseMatrix, projectionMatrix, modelViewMatrix);
     glMatrix.mat4.invert(inverseMatrix, inverseMatrix);
 }
@@ -258,24 +256,20 @@ function drawScene(gl) {
     
 
     for (const d of data) {
-        //console.log(d.layer, d.t_cnt)
         glMatrix.mat4.translate(layerViewMatrix, modelViewMatrix, [0, 0, d.z_top*2, 1.0]);
         gl.uniformMatrix4fv(uModelViewMatrix, false, layerViewMatrix);
         gl.bindBuffer(gl.ARRAY_BUFFER, d.p_buffer);
         gl.enableVertexAttribArray(aVertexPosition);
         gl.vertexAttribPointer(aVertexPosition, 3, gl.FLOAT, false, 0, 0);
 
-        //console.log(z_position)
+        const camdist_um = (-zNear-z_position)/data_scale/2.;
+        const oheight_um = (d.z_top-(d.depth/2.))/data_scale;
+        const odist_um = camdist_um - oheight_um;
 
-        const camdist = -zNear-z_position;
-        const oheight = d.z_top-(d.depth/2);
-
-        let alpha = clamp((camdist-oheight*30)*30, 0, 1);
-        if (oheight == 0) {
-            alpha = 1;
+        let alpha = clamp(odist_um*2-1., 0., 1.);
+        if (oheight_um == 0) {
+            alpha = 1.;
         }
-
-        //console.log(camdist, oheight, alpha)
 
         if (d.depth > 0) {
             gl.uniform4fv(uColor, make_color(d.color, false, 80, alpha));
@@ -294,7 +288,6 @@ function drawScene(gl) {
         gl.uniform4fv(uColor, make_color(d.color, true, 0, alpha));
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, d.t_buffer);
         gl.drawElements(gl.TRIANGLES, d.t_len, gl.UNSIGNED_INT, 0);
-
     }
 }
 
