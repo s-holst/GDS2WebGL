@@ -5,8 +5,8 @@ It does so by translating the geometric shapes found in [GDSII stream format](ht
 The generated view can be panned and zoomed similar to popular map services.
 The HTML designed to be served locally or via an HTTP server and to be viewed in all modern web browsers on PCs, Macs, as well as touch-enabled tablets and smartphones.
 
-[![GDS2WebGL Banner](docs/banner.jpg)](https://s-holst.github.io/GDS2WebGL/demo/)
-[Interactive Demo](https://s-holst.github.io/GDS2WebGL/demo/)
+[![GDS2WebGL Banner](docs/banner.jpg)](https://s-holst.github.io/GDS2WebGL/examples/spm.html)
+[Interactive Demo](https://s-holst.github.io/GDS2WebGL/examples/spm.html)
 
 ## Why?
 
