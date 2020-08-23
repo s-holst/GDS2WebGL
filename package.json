@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "browserify": "^16.5.1",
+    "eslint": "^7.7.0",
     "tinyify": "^3.0.0"
   },
   "scripts": {
